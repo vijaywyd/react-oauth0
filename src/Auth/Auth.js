@@ -15,5 +15,34 @@ export default class Auth {
     login = () => {
         this.auth0.authorize()
     }
+
+    handleAuthentication = () => {
+        //parses the hash from URL => get error and result object
+        this.auth0.parseHash((err, authResult) => {
+            if(authResult && authResult.accessToken && authResult.idToken) {
+                this.setSession(authResult);
+                //Redirect the application
+                this.history.push("/home")
+            } else if (err) {
+                alert(`Error: ${err.error}`);
+            }
+        });
+    }
+
+    setSession = (authResult) => {
+        //Set the time access toke will expire . expiresIn is in second . Multiply by 1000 to convert into millisecond
+        const expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
+
+        localStorage.setItem("access_token", authResult.accessToken);
+        localStorage.setItem("id_token", authResult.idToken);
+        localStorage.setItem("expires_at", expiresAt);
+    }
+
+    isAuthenticated= () => {
+        const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
+        return new Date().getTime() < expiresAt;
+
+
+    }
     
 }
