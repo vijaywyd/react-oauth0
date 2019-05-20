@@ -10,6 +10,8 @@ export default class Auth {
             responseType: "token id_token",
             scope: "openid profile email"
         });
+
+        this.userProfile = null;
     }
 
     login = () => {
@@ -41,8 +43,33 @@ export default class Auth {
     isAuthenticated= () => {
         const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
         return new Date().getTime() < expiresAt;
+    }
 
+    logout = () => {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("id_token");
+        localStorage.removeItem("expires_at");
 
+        this.history.push("/");
+        this.auth0.logout({
+            clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
+            returnTo: "http://localhost:3000"
+        });
+    }
+
+    getAccessToken = () => {
+        const accessToken = localStorage.getItem("access_token");
+        if(!accessToken) {
+            throw new Error("Access Token not found");
+        }
+
+        return accessToken;
     }
     
+    getProfile = cb => {
+        if(this.userProfile) {
+            return cb(this.userProfile);
+        }
+        
+    }
 }

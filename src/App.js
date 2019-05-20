@@ -11,11 +11,11 @@ function App(props) {
 
   return (
     <>
-      <Nav/>
+      <Nav auth = {auth}/>
+
       <Route path="/home" exact render = { props => <Home auth = {auth} {...props}></Home>} />
       
       <Route path="/callbackauth" exact render = { props => <CallBackAuth auth = {auth} {...props}></CallBackAuth>} />
-
       
       <Route path="/profile" exact component={Profile} />
     </>
