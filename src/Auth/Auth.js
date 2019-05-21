@@ -49,6 +49,7 @@ export default class Auth {
         localStorage.removeItem("access_token");
         localStorage.removeItem("id_token");
         localStorage.removeItem("expires_at");
+        this.userProfile = null;
 
         this.history.push("/");
         this.auth0.logout({
@@ -70,6 +71,17 @@ export default class Auth {
         if(this.userProfile) {
             return cb(this.userProfile);
         }
+
+        /**
+         * This end-point is part of oauth standard.
+         * We could get the user's profile from ID-token via jwt-decode on npm
+         */
+        this.auth0.client.userInfo(this.getAccessToken(), (err, profile) =>{
+            if(profile) {
+                this.userProfile = profile;
+            }
+            cb(profile, err);
+        });
         
     }
 }
