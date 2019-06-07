@@ -15,6 +15,11 @@ export const Nav = (props) => {
             <li>
                 <Link to = "/public">Public API</Link>
             </li>
+
+            <li>
+                <Link to = "/private">Private API</Link>
+            </li>
+
             <li>
                 <button onClick = {isAuthenticated() ? logout : login }>
                     {isAuthenticated() ? "Logout" : "Login"}

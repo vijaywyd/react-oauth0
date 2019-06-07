@@ -6,6 +6,9 @@ import { Nav } from './components/Nav/Nav';
 import Auth from './Auth/Auth';
 import CallBackAuth from './CallBackAuth/CallBackAuth';
 import PublicPage from './components/PublicPages/Publicpage';
+import PrivatePage from './components/PrivatePages/PrivatePage';
+
+
 function App(props) {
 
   const auth = new Auth(props.history);
@@ -22,6 +25,9 @@ function App(props) {
         render = {props => auth.isAuthenticated() ? <Profile auth = {auth} {...props}/> : <Redirect to="/home" />}/>
 
       <Route path="/public" component = {PublicPage} />
+
+      <Route path="/private" 
+        render = {props => auth.isAuthenticated() ? (<PrivatePage auth = {auth} {...props} hi = "hi"/>) : null}/>
 
     </>
   );
